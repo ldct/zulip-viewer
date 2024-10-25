@@ -7,18 +7,29 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ChannelsView: View {
+    @State var subscribedChannels: [Subscription] = []
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        List {
+            ForEach(subscribedChannels) {c in
+                VStack(alignment: .leading) {
+                    Text("\(c.name)")
+                    Text("\(c.streamId)")
+                    Text(try! AttributedString(markdown: c.description))
+                        .font(.caption)
+                }
+            }
         }
-        .padding()
+        .task {
+            let c = NetworkClient()
+            try! await c.authenticate()
+            subscribedChannels = try! await c.getSubscriptions()
+        }
     }
+    
 }
 
 #Preview {
-    ContentView()
+    ChannelsView()
 }
