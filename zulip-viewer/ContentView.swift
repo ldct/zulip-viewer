@@ -7,29 +7,82 @@
 
 import SwiftUI
 
-struct ChannelsView: View {
-    @State var subscribedChannels: [Subscription] = []
+struct StreamSummaryView: View {
+    let stream: Stream
     
     var body: some View {
-        List {
-            ForEach(subscribedChannels) {c in
-                VStack(alignment: .leading) {
-                    Text("\(c.name)")
-                    Text("\(c.streamId)")
-                    Text(try! AttributedString(markdown: c.description))
-                        .font(.caption)
+        VStack(alignment: .leading) {
+            Text("\(stream.name)")
+            Text("\(stream.streamId)")
+            Text(try! AttributedString(markdown: stream.description))
+                .font(.caption)
+        }
+    }
+}
+
+
+struct StreamDetailsView: View {
+    let stream: Stream
+    
+    @State var topics: [Topic] = []
+    
+    @EnvironmentObject private var networkClient: NetworkClient
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("\(stream.name)")
+            List {
+                ForEach(topics) { topic in
+                    NavigationLink(value: topic.name, label: {
+                        Text(topic.name)
+                    })
                 }
             }
         }
         .task {
-            let c = NetworkClient()
-            try! await c.authenticate()
-            subscribedChannels = try! await c.getSubscriptions()
+            topics = try! await networkClient.getTopics(streamId: stream.streamId)
+        }
+    }
+}
+
+struct ChannelsView: View {
+    let subscribedChannels: [Stream]
+    
+    @State private var path = NavigationPath()
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(subscribedChannels) {c in
+                    NavigationLink(value: c, label: {
+                        StreamSummaryView(stream: c)
+                    })
+                }
+            }
+            .navigationDestination(for: Stream.self) { x in
+                StreamDetailsView(stream: x)
+            }
+            .navigationDestination(for: String.self) {x in
+                Text(x)
+            }
         }
     }
     
 }
 
 #Preview {
-    ChannelsView()
+    ChannelsView(
+        subscribedChannels: [
+            Stream(
+                streamId: 458659,
+                name: "Equational",
+                description: "Coordination for the Equational Project"
+            ),
+            Stream(
+                streamId: 416277,
+                name: "FLT",
+                description: "Fermat\'s Last Theorem"
+            )
+        ]
+    )
 }

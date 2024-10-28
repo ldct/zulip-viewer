@@ -9,9 +9,19 @@ import SwiftUI
 
 @main
 struct zulip_viewerApp: App {
+    
+    @State var subscribedChannels: [Stream] = []
+    
+    let networkClient = NetworkClient()
+
     var body: some Scene {
         WindowGroup {
-            ChannelsView()
+            ChannelsView(subscribedChannels: subscribedChannels)
+                .environmentObject(networkClient)
+                .task {
+                    try! await networkClient.authenticate()
+                    subscribedChannels = try! await networkClient.getSubscriptions()
+                }
         }
     }
 }
