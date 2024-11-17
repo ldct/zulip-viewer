@@ -17,8 +17,8 @@ struct ChannelsView: View {
             .navigationDestination(for: Stream.self) { x in
                 StreamTopicsView(stream: x)
             }
-            .navigationDestination(for: Topic.self) { x in
-                TopicsDetailView(topic: x)
+            .navigationDestination(for: WrappedTopic.self) { x in
+                TopicsDetailView(streamId: x.parentStreamID, topic: x.topic)
             }
             .navigationDestination(for: String.self) {x in
                 Text("fallback \(x)")

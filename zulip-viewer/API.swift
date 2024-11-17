@@ -1,5 +1,14 @@
 import Foundation
 
+struct WrappedTopic: Identifiable, Hashable {
+    let parentStreamID: Int
+    let topic: Topic
+    
+    var id: String {
+        topic.id
+    }
+}
+
 struct Topic: Codable, Identifiable, Hashable {
     let maxId: Int
     let name: String
@@ -38,10 +47,12 @@ struct NarrowResponse: Codable {
 struct Message: Codable, Identifiable {
     let _id: Int
     let content: String
+    let senderFullName: String
     
     enum CodingKeys: String, CodingKey {
         case _id = "id"
         case content = "content"
+        case senderFullName = "senderFullName"
     }
     
     var id: String {
@@ -75,13 +86,20 @@ struct APIKeyResponse: Codable {
         return try await getAPIKeyFromNetwork(credentials)
     }
     
-    func getNarrow(anchor: Int, topicName: String) async throws -> NarrowResponse {
+    func getNarrow(anchor: Int, channelID: Int, topicName: String) async throws -> NarrowResponse {
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "anchor", value: "\(anchor)"))
-        queryItems.append(URLQueryItem(name: "num_before", value: "10"))
-        queryItems.append(URLQueryItem(name: "num_after", value: "0"))
-        queryItems.append(URLQueryItem(name: "client_gravatar", value: "true"))
-        queryItems.append(URLQueryItem(name: "topic", value: topicName))
+        queryItems.append(URLQueryItem(name: "num_before", value: "5"))
+        queryItems.append(URLQueryItem(name: "num_after", value: "5"))
+        queryItems.append(URLQueryItem(name: "apply_markdown", value: "false"))
+
+        let narrow = """
+[
+{"negated":false,"operator":"channel","operand":\(channelID)},
+{"negated":false,"operator":"topic","operand":"\(topicName)"}
+]
+"""
+        queryItems.append(URLQueryItem(name: "narrow", value: narrow))
 
         var components = URLComponents()
         components.queryItems = queryItems
@@ -98,6 +116,8 @@ struct APIKeyResponse: Codable {
         print(url)
         
         let (data, _) = try await session.data(from: url)
+        
+        print(String(data: data, encoding: .utf8)!)
 
         let response = try decoder.decode(NarrowResponse.self, from: data)
 

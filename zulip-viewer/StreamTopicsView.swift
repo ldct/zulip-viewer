@@ -1,4 +1,5 @@
 import SwiftUI
+import WebKit
 
 /// List of topics in a stream
 struct StreamTopicsView: View {
@@ -13,8 +14,8 @@ struct StreamTopicsView: View {
             Text("\(stream.name)")
             List {
                 ForEach(topics) { topic in
-                    NavigationLink(value: topic, label: {
-                        Text("\(topic.name) (?)")
+                    NavigationLink(value: WrappedTopic(parentStreamID: stream.streamId, topic: topic), label: {
+                        Text("\(topic.name)")
                     })
                 }
             }
@@ -27,6 +28,7 @@ struct StreamTopicsView: View {
 
 /// Detail view of a topic
 struct TopicsDetailView: View {
+    let streamId: Int
     let topic: Topic
     
     @EnvironmentObject private var networkClient: NetworkClient
@@ -37,14 +39,34 @@ struct TopicsDetailView: View {
         List {
             Text(topic.name)
             ForEach(messages) { message in
-                HTMLText(html: message.content)
+                VStack(alignment: .leading) {
+                    Text("\(message.senderFullName)")
+                        .bold()
+                        .padding(.bottom, 2)
+                    HTMLText(html: message.content)
+                }
             }
         }
             .task {
-                let narrowResponse = try! await networkClient.getNarrow(anchor: topic.maxId, topicName: topic.name)
-                print(narrowResponse.messages)
+                let narrowResponse = try! await networkClient.getNarrow(
+                    anchor: topic.maxId,
+                    channelID: streamId,
+                    topicName: topic.name
+                )
                 messages = narrowResponse.messages
             }
+    }
+}
+
+struct HTMLStringView: UIViewRepresentable {
+    let htmlContent: String
+
+    func makeUIView(context: Context) -> WKWebView {
+        return WKWebView()
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        uiView.loadHTMLString(htmlContent, baseURL: nil)
     }
 }
 
@@ -53,12 +75,7 @@ struct HTMLText: View {
     let html: String
     
     var body: some View {
-        if let nsAttributedString = try? NSAttributedString(data: Data(html.utf8), options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil),
-           let attributedString = try? AttributedString(nsAttributedString, including: \.uiKit) {
-            Text(attributedString)
-        } else {
-            // fallback...
-            Text(html)
-        }
+        let attrS = try! AttributedString(markdown: html)
+        Text(attrS)
     }
 }
