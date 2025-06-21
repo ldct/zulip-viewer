@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ChannelsView: View {
+struct StreamsView: View {
     let subscribedChannels: [Stream]
     
     @State private var path = NavigationPath()
@@ -36,7 +36,7 @@ struct ChannelsView: View {
 }
 
 #Preview {
-    ChannelsView(
+    StreamsView(
         subscribedChannels: [
             Stream(
                 streamId: 458659,

@@ -18,7 +18,7 @@ struct zulip_viewerApp: App {
         WindowGroup {
             Group {
                 if isAuthenticated {
-                    ChannelsView(subscribedChannels: subscribedChannels)
+                    StreamsView(subscribedChannels: subscribedChannels)
                 } else {
                     LoginView(isAuthenticated: $isAuthenticated,
                               subscribedChannels: $subscribedChannels)
