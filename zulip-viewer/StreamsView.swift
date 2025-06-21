@@ -4,6 +4,18 @@ struct StreamsView: View {
     let subscribedChannels: [Stream]
     
     @State private var path = NavigationPath()
+    @State private var searchText = ""
+    
+    var filteredChannels: [Stream] {
+        if searchText.isEmpty {
+            return subscribedChannels
+        } else {
+            return subscribedChannels.filter { stream in
+                stream.name.localizedCaseInsensitiveContains(searchText) ||
+                stream.description.localizedCaseInsensitiveContains(searchText)
+            }
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -14,12 +26,13 @@ struct StreamsView: View {
                     .padding(.top)
                 
                 List {
-                    ForEach(subscribedChannels) { c in
+                    ForEach(filteredChannels) { c in
                         NavigationLink(value: c, label: {
                             StreamSummaryView(stream: c)
                         })
                     }
                 }
+                .searchable(text: $searchText, prompt: "Search channels")
             }
             .navigationDestination(for: Stream.self) { x in
                 StreamTopicsView(stream: x)
