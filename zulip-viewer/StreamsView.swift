@@ -20,11 +20,6 @@ struct StreamsView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Text("All Channels")
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .font(.title2)
-                    .padding(.top)
-                
                 List {
                     ForEach(filteredChannels) { c in
                         NavigationLink(value: c, label: {
