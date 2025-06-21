@@ -15,7 +15,7 @@ struct StreamTopicsView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             List {
                 ForEach(topics) { topic in
-                    NavigationLink(value: WrappedTopic(parentStreamID: stream.streamId, topic: topic), label: {
+                    NavigationLink(value: WrappedTopic(parentStreamID: stream.streamId, parentStreamName: stream.name, topic: topic), label: {
                         Text("\(topic.name)")
                     })
                 }
@@ -30,6 +30,7 @@ struct StreamTopicsView: View {
 /// Detail view of a topic
 struct TopicsDetailView: View {
     let streamId: Int
+    let streamName: String
     let topic: Topic
     
     @Environment(NetworkClient.self) private var networkClient
@@ -37,25 +38,29 @@ struct TopicsDetailView: View {
     @State var messages = [Message]()
     
     var body: some View {
-        List {
-            Text(topic.name)
-            ForEach(messages) { message in
-                VStack(alignment: .leading) {
-                    Text("\(message.senderFullName)")
-                        .bold()
-                        .padding(.bottom, 2)
-                    HTMLText(html: message.content)
+        VStack(alignment: .leading) {
+            Text("\(streamName) > \(topic.name)")
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            List {
+                ForEach(messages) { message in
+                    VStack(alignment: .leading) {
+                        Text("\(message.senderFullName)")
+                            .bold()
+                            .padding(.bottom, 2)
+                        HTMLText(html: message.content)
+                    }
                 }
             }
         }
-            .task {
-                let narrowResponse = try! await networkClient.getNarrow(
-                    anchor: topic.maxId,
-                    channelID: streamId,
-                    topicName: topic.name
-                )
-                messages = narrowResponse.messages
-            }
+        .task {
+            let narrowResponse = try! await networkClient.getNarrow(
+                anchor: topic.maxId,
+                channelID: streamId,
+                topicName: topic.name
+            )
+            messages = narrowResponse.messages
+        }
     }
 }
 
