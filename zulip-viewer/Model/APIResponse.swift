@@ -10,6 +10,11 @@ struct SubscriptionsResponse: Codable {
     let streams: [Stream]
 }
 
+struct UserSubscriptionsResponse: Codable {
+    let result: String
+    let subscriptions: [Stream]
+}
+
 struct NarrowResponse: Codable {
     let result: String
     let messages: [Message]

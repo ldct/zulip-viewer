@@ -109,12 +109,12 @@ import Observation
         decoder.keyDecodingStrategy = .convertFromSnakeCase
 
         
-        let url = URL(string: "https://leanprover.zulipchat.com/api/v1/streams")!
+        let url = URL(string: "https://leanprover.zulipchat.com/api/v1/users/me/subscriptions")!
         let (data, _) = try await session.data(from: url)
 
-        let response = try decoder.decode(SubscriptionsResponse.self, from: data)
+        let response = try decoder.decode(UserSubscriptionsResponse.self, from: data)
         
-        return response.streams
+        return response.subscriptions
     }
     
     func getTopics(streamId: Int) async throws -> [Topic] {
