@@ -19,9 +19,18 @@ struct TopicsDetailView: View {
             List {
                 ForEach(messages) { message in
                     VStack(alignment: .leading) {
-                        Text("\(message.senderFullName)")
-                            .bold()
-                            .padding(.bottom, 2)
+                        HStack {
+                            Text(message.senderFullName)
+                                .bold()
+                            Spacer()
+                            Text(
+                                Date(timeIntervalSince1970: TimeInterval(message.timestamp)),
+                                style: .relative
+                            )
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.bottom, 2)
                         HTMLText(html: message.content)
                     }
                 }
