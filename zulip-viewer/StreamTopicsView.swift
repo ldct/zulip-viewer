@@ -12,6 +12,7 @@ struct StreamTopicsView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("\(stream.name)")
+                .frame(maxWidth: .infinity, alignment: .center)
             List {
                 ForEach(topics) { topic in
                     NavigationLink(value: WrappedTopic(parentStreamID: stream.streamId, topic: topic), label: {
