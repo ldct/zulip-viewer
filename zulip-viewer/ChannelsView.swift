@@ -7,11 +7,18 @@ struct ChannelsView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(subscribedChannels) { c in
-                    NavigationLink(value: c, label: {
-                        StreamSummaryView(stream: c)
-                    })
+            VStack(alignment: .leading) {
+                Text("All Channels")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .font(.title2)
+                    .padding(.top)
+                
+                List {
+                    ForEach(subscribedChannels) { c in
+                        NavigationLink(value: c, label: {
+                            StreamSummaryView(stream: c)
+                        })
+                    }
                 }
             }
             .navigationDestination(for: Stream.self) { x in
