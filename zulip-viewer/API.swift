@@ -146,6 +146,16 @@ struct APIKeyResponse: Codable {
         return response.apiKey!
     }
     
+    /// Perform login with given username and password, store credentials and API key in keychain.
+    func login(username: String, password: String) async throws {
+        let credentials = LoginCredentials(username: username, password: password)
+        let apiKey = try await getAPIKeyFromNetwork(credentials)
+        try KeychainManager.storePassword(credentials)
+        _ = try? KeychainManager.removeFromKeychain(tag: KeychainManager.tag)
+        try KeychainManager.storeAPIKey(apiKey)
+        self.apiKey = apiKey
+    }
+    
     var sessionConfig: URLSessionConfiguration {
         let sessionConfig = URLSessionConfiguration.default
         let loginString = "xuanji@gmail.com:\(apiKey)"

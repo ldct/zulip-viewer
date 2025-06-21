@@ -10,19 +10,29 @@ import SwiftUI
 @main
 struct zulip_viewerApp: App {
     
-    @State var subscribedChannels: [Stream] = []
-    
-    let networkClient = NetworkClient()
+    @State private var subscribedChannels: [Stream] = []
+    @State private var isAuthenticated = false
+    @StateObject private var networkClient = NetworkClient()
 
     var body: some Scene {
         WindowGroup {
-            ChannelsView(subscribedChannels: subscribedChannels)
-                .environmentObject(networkClient)
-                .task {
-//                    _ = try? KeychainManager.storePassword()
-                    try! await networkClient.authenticate()
-                    subscribedChannels = try! await networkClient.getSubscriptions()
+            Group {
+                if isAuthenticated {
+                    ChannelsView(subscribedChannels: subscribedChannels)
+                } else {
+                    LoginView(isAuthenticated: $isAuthenticated,
+                              subscribedChannels: $subscribedChannels)
                 }
+            }
+            .environmentObject(networkClient)
+            .task {
+                do {
+                    try await networkClient.authenticate()
+                    subscribedChannels = try await networkClient.getSubscriptions()
+                    isAuthenticated = true
+                } catch {
+                }
+            }
         }
     }
 }

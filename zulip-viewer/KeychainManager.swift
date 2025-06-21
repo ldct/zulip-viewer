@@ -87,21 +87,26 @@ class KeychainManager {
         return .init(username: account, password: password)
     }
     
-    static func storePassword() throws {
-        let passwordData = "g!...".data(using: .utf8)!
-        let query: [String: Any] = [
+    /// Store login credentials (username and password) in the keychain.
+    static func storePassword(_ credentials: LoginCredentials) throws {
+        let passwordData = credentials.password.data(using: .utf8)!
+        let deleteQuery: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "xuanji@gmail.com",
+            kSecAttrAccount as String: credentials.username
+        ]
+        SecItemDelete(deleteQuery as CFDictionary)
+
+        let addQuery: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: credentials.username,
             kSecValueData as String: passwordData,
             kSecAttrAccessible as String: kSecAttrAccessibleWhenUnlocked
         ]
-
-        // adding the item to keychain here
-        let status = SecItemAdd(query as CFDictionary, nil)
-        
-        if status == errSecDuplicateItem {
+        let status = SecItemAdd(addQuery as CFDictionary, nil)
+        guard status != errSecDuplicateItem else {
             throw KeychainError.duplicateItem
-        } else if status != errSecSuccess {
+        }
+        guard status == errSecSuccess else {
             throw KeychainError.unknown(status)
         }
     }
