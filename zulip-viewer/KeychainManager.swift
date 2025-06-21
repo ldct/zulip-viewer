@@ -88,7 +88,7 @@ class KeychainManager {
     }
     
     static func storePassword() throws {
-        let passwordData = "INSERTHERE".data(using: .utf8)!
+        let passwordData = "g!...".data(using: .utf8)!
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: "xuanji@gmail.com",

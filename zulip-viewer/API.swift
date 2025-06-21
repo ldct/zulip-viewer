@@ -75,8 +75,9 @@ struct APIKeyResponse: Codable {
         } else {
             try await self.apiKey = getAPIKeyWithSavedCredentials()
                     
+            print("apiKey=\(apiKey)")
 
-            try! KeychainManager.removeFromKeychain(tag: KeychainManager.tag)
+            _ = try? KeychainManager.removeFromKeychain(tag: KeychainManager.tag)
             try! KeychainManager.storeAPIKey(self.apiKey)
         }
     }

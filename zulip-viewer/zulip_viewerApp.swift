@@ -19,6 +19,7 @@ struct zulip_viewerApp: App {
             ChannelsView(subscribedChannels: subscribedChannels)
                 .environmentObject(networkClient)
                 .task {
+//                    _ = try? KeychainManager.storePassword()
                     try! await networkClient.authenticate()
                     subscribedChannels = try! await networkClient.getSubscriptions()
                 }
