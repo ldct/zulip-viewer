@@ -46,12 +46,36 @@ struct NarrowResponse: Codable {
     let messages: [Message]
 }
 
+struct EmojiReaction: Codable, Identifiable {
+    let emojiName: String
+    let emojiCode: String
+    let reactionType: String
+    let userID: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case emojiName = "emojiName"
+        case emojiCode = "emojiCode"
+        case reactionType = "reactionType"
+        case userID = "userId"
+    }
+    
+    var id: String {
+        "\(emojiName)-\(userID)"
+    }
+    
+    var unicodeEmoji: String {
+        guard let codePoint = Int(emojiCode, radix: 16) else { return "?" }
+        return String(UnicodeScalar(codePoint) ?? UnicodeScalar(0x3F)!)
+    }
+}
+
 struct Message: Codable, Identifiable {
     let _id: Int
     let content: String
     let senderFullName: String
     let timestamp: Int
     let avatarUrl: URL?
+    let reactions: [EmojiReaction]
     
     enum CodingKeys: String, CodingKey {
         case _id = "id"
@@ -59,6 +83,7 @@ struct Message: Codable, Identifiable {
         case senderFullName = "senderFullName"
         case timestamp
         case avatarUrl
+        case reactions
     }
     
     var id: String {
