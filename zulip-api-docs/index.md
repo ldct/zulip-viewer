@@ -39,25 +39,27 @@ This directory contains comprehensive documentation for all Zulip API endpoints,
 - Edit Draft - [TODO]
 - Delete Draft - [TODO]
 
-## Channels/Streams API Endpoints (Pending: 0/17)
+## Channels/Streams API Endpoints (Completed: 19/19)
 
-- Get Subscriptions - [TODO]
-- Subscribe to Channels - [TODO]
-- Unsubscribe from Channels - [TODO]
-- Get Subscription Status - [TODO]
-- Get Channel Subscribers - [TODO]
-- Update Subscription Settings - [TODO]
-- Get All Channels - [TODO]
-- Get Channel by ID - [TODO]
-- Get Channel ID - [TODO]
-- Create a Channel - [TODO]
-- Update a Channel - [TODO]
-- Archive a Channel - [TODO]
-- Get Channel Email Address - [TODO]
-- Get Channel Topics - [TODO]
-- Mute a Topic - [TODO]
-- Update User Topic Settings - [TODO]
-- Delete a Topic - [TODO]
+- [Get Subscriptions](get-subscriptions.md) - GET `/api/v1/users/me/subscriptions`
+- [Subscribe to Channels](subscribe.md) - POST `/api/v1/users/me/subscriptions`
+- [Unsubscribe from Channels](unsubscribe.md) - DELETE `/api/v1/users/me/subscriptions`
+- [Get Subscription Status](get-subscription-status.md) - GET `/api/v1/users/{user_id}/subscriptions/{stream_id}`
+- [Get Channel Subscribers](get-subscribers.md) - GET `/api/v1/streams/{stream_id}/members`
+- [Update Subscription Settings](update-subscription-settings.md) - POST `/api/v1/users/me/subscriptions/properties`
+- [Get All Channels](get-streams.md) - GET `/api/v1/streams`
+- [Get Channel by ID](get-stream-by-id.md) - GET `/api/v1/streams/{stream_id}`
+- [Get Channel ID](get-stream-id.md) - GET `/api/v1/get_stream_id`
+- [Create a Channel](create-stream.md) - POST `/api/v1/users/me/subscriptions` (via subscribe)
+- [Update a Channel](update-stream.md) - PATCH `/api/v1/streams/{stream_id}`
+- [Archive a Channel](archive-stream.md) - DELETE `/api/v1/streams/{stream_id}`
+- [Get Channel Email Address](get-stream-email-address.md) - GET `/api/v1/streams/{stream_id}/email_address`
+- [Get Channel Topics](get-stream-topics.md) - GET `/api/v1/users/me/streams/{stream_id}/topics`
+- [Mute a Topic](mute-topic.md) - POST `/api/v1/users/me/subscriptions/muted_topics` (deprecated)
+- [Update User Topic Settings](update-user-topic.md) - POST `/api/v1/user_topics`
+- [Delete a Topic](delete-topic.md) - POST `/api/v1/streams/{stream_id}/delete_topic`
+- [Add Default Channel](add-default-stream.md) - POST `/api/v1/default_streams`
+- [Remove Default Channel](remove-default-stream.md) - DELETE `/api/v1/default_streams`
 
 ## Users API Endpoints (Pending: 0/23+)
 
@@ -137,8 +139,8 @@ This directory contains comprehensive documentation for all Zulip API endpoints,
 
 ## Progress Summary
 
-- **Completed**: 23 endpoints
-- **Pending**: 60+ endpoints
+- **Completed**: 42 endpoints
+- **Pending**: 48+ endpoints
 - **Total Estimated**: 90+ endpoints
 
 Last updated: 2025-06-21
