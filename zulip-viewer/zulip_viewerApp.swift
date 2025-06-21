@@ -12,7 +12,7 @@ struct zulip_viewerApp: App {
     
     @State private var subscribedChannels: [Stream] = []
     @State private var isAuthenticated = false
-    @StateObject private var networkClient = NetworkClient()
+    @State private var networkClient = NetworkClient()
 
     var body: some Scene {
         WindowGroup {
@@ -24,7 +24,7 @@ struct zulip_viewerApp: App {
                               subscribedChannels: $subscribedChannels)
                 }
             }
-            .environmentObject(networkClient)
+            .environment(networkClient)
             .task {
                 do {
                     try await networkClient.authenticate()

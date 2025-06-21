@@ -2,7 +2,7 @@ import SwiftUI
 
 /// A view that prompts the user to enter their Zulip credentials and logs in.
 struct LoginView: View {
-    @EnvironmentObject private var networkClient: NetworkClient
+    @Environment(NetworkClient.self) private var networkClient
     @Binding var isAuthenticated: Bool
     @Binding var subscribedChannels: [Stream]
 
@@ -68,5 +68,5 @@ struct LoginView: View {
 #Preview {
     LoginView(isAuthenticated: .constant(false),
               subscribedChannels: .constant([]))
-        .environmentObject(NetworkClient())
+        .environment(NetworkClient())
 }

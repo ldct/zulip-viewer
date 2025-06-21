@@ -1,4 +1,5 @@
 import Foundation
+import Observation
 
 struct WrappedTopic: Identifiable, Hashable {
     let parentStreamID: Int
@@ -66,7 +67,8 @@ struct APIKeyResponse: Codable {
     let apiKey: String?
 }
 
-@MainActor class NetworkClient: ObservableObject {
+@MainActor
+@Observable class NetworkClient {
     var apiKey: String = ""
     
     func authenticate() async throws {

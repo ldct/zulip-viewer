@@ -7,7 +7,7 @@ struct StreamTopicsView: View {
     
     @State var topics: [Topic] = []
     
-    @EnvironmentObject private var networkClient: NetworkClient
+    @Environment(NetworkClient.self) private var networkClient
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,7 +31,7 @@ struct TopicsDetailView: View {
     let streamId: Int
     let topic: Topic
     
-    @EnvironmentObject private var networkClient: NetworkClient
+    @Environment(NetworkClient.self) private var networkClient
     
     @State var messages = [Message]()
     
