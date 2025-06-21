@@ -18,20 +18,33 @@ struct TopicsDetailView: View {
 
             List {
                 ForEach(messages) { message in
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(message.senderFullName)
-                                .bold()
-                            Spacer()
-                            Text(
-                                Date(timeIntervalSince1970: TimeInterval(message.timestamp)),
-                                style: .relative
-                            )
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                    HStack(alignment: .top) {
+                        AsyncImage(url: message.avatarUrl) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            Circle()
+                                .fill(Color.gray.opacity(0.3))
                         }
-                        .padding(.bottom, 2)
-                        HTMLText(html: message.content)
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        
+                        VStack(alignment: .leading) {
+                            HStack {
+                                Text(message.senderFullName)
+                                    .bold()
+                                Spacer()
+                                Text(
+                                    Date(timeIntervalSince1970: TimeInterval(message.timestamp)),
+                                    style: .relative
+                                )
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.bottom, 2)
+                            HTMLText(html: message.content)
+                        }
                     }
                 }
             }
