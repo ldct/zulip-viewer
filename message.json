@@ -1,0 +1,780 @@
+{
+  "result": "success",
+  "msg": "",
+  "messages": [
+    {
+      "id": 524287311,
+      "sender_id": 631691,
+      "content": "We are pleased to introduce [LeanHammer](https://github.com/JOSHCLUNE/LeanHammer), an automated reasoning tool for Lean which combines multiple techniques for proof search and formal reconstruction. The `hammer` tactic searches for a proof of the current goal and then suggests a tactic script that can replace the `hammer` invocation. Example usage:\n```\nimport Hammer\nexample (a b : Nat) : a + b = b + a := by\n  hammer\n```\nYou can also invoke our cloud-based neural premise selector only, using the `premises` tactic, which suggests relevant premises for the current goal.\n\nLeanHammer currently works with versions of Mathlib based on Lean v4.20.0 as well as the current version of Mathlib. You can add LeanHammer to your project by inserting the following *before* requiring Mathlib:\n```toml\n[[require]]\nname = \"Hammer\"\ngit = \"https://github.com/JOSHCLUNE/LeanHammer\"\n```\nYou then need to execute `lake update hammer`. Additional information and instructions can be found in our [repository](https://github.com/JOSHCLUNE/LeanHammer).\n\nLeanHammer builds on the work of many others. It relies on several independent projects and components, including:\n- **Neural premise selection** ([repository](https://github.com/hanwenzhu/premise-selection), [paper](https://arxiv.org/abs/2506.07477))\n- **Symbolic premise selection** using an implementation of the [MePo filter](https://www.cl.cam.ac.uk/~lp15/papers/Automation/filtering.pdf) due to Kim Morrison\n- **Monomorphization and translation** using [Lean-auto](https://github.com/leanprover-community/lean-auto) (described [here](https://arxiv.org/abs/2505.14929))\n- **External automated theorem provers** including [Zipperposition](https://github.com/sneeuwballen/zipperposition) and (in progress) [cvc5](https://cvc5.github.io/)\n- **Native proof (re)construction** using [Aesop](https://github.com/leanprover-community/aesop) (described [here](https://doi.org/10.1145/3573105.3575671)) and [Duper](https://github.com/leanprover-community/duper) (described [here](https://doi.org/10.4230/LIPIcs.ITP.2024.10)), and (in progress) [LeanSMT](https://github.com/ufmg-smite/lean-smt).\n\nTechnical details behind LeanHammer and its premise selection component can be found in our [paper](https://arxiv.org/abs/2506.07477). LeanHammer is currently developed by @**Thomas Zhu**, @**Josh Clune**, @**Jeremy Avigad**, @**Albert Jiang**, and @**Sean Welleck**, with help from many people in the Lean Community.",
+      "recipient_id": 127388,
+      "timestamp": 1750089600,
+      "client": "ZulipElectron",
+      "subject": "LeanHammer",
+      "topic_links": [],
+      "is_me_message": false,
+      "reactions": [
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 321854
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 556875
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 259452
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 123965
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 315577
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 346696
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 648495
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 900292
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 417654
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 130384
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 417654
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 303675
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 303675
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110050
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 360938
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 360938
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 360938
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 321696
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 306577
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 387244
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 243562
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 243562
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 243562
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 321459
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 256311
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 256311
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 376152
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 376152
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 376152
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 671055
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 671055
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 671055
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 306601
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 432410
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 432410
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 432410
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 470149
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 373986
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 373986
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 373986
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 395550
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 221921
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 557459
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 557459
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 400289
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 466334
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 466334
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 776090
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110031
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110293
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110038
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110038
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110038
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 346070
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 346070
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 240862
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 240862
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 240862
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 129120
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 129120
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 690587
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 780541
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 727207
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 253861
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 253861
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 253861
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 588998
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110154
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 128280
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 128280
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 634338
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 634338
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 634338
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 602461
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 638899
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 638899
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 626349
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110087
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110087
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 110087
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 389019
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 389019
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 389019
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 372804
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 266304
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 381517
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 252920
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 686407
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 112680
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 112680
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 112680
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 587858
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 587858
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 569722
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 246591
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 466290
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 132603
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 132603
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 132603
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 364929
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 364929
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 364929
+        },
+        {
+          "emoji_name": "heart",
+          "emoji_code": "2764",
+          "reaction_type": "unicode_emoji",
+          "user_id": 709805
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 315434
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 315434
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 315434
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 693606
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 930099
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 111080
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 584504
+        },
+        {
+          "emoji_name": "octopus",
+          "emoji_code": "1f419",
+          "reaction_type": "unicode_emoji",
+          "user_id": 584504
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 584504
+        },
+        {
+          "emoji_name": "hammer",
+          "emoji_code": "1f528",
+          "reaction_type": "unicode_emoji",
+          "user_id": 930142
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 424214
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 645809
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 337670
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 416280
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 585783
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 751962
+        },
+        {
+          "emoji_name": "tada",
+          "emoji_code": "1f389",
+          "reaction_type": "unicode_emoji",
+          "user_id": 329243
+        }
+      ],
+      "submessages": [],
+      "flags": [
+        "read"
+      ],
+      "sender_full_name": "Thomas Zhu",
+      "sender_email": "user631691@leanprover.zulipchat.com",
+      "sender_realm_str": "leanprover",
+      "display_recipient": "announce",
+      "type": "stream",
+      "stream_id": 113486,
+      "avatar_url": "https://secure.gravatar.com/avatar/5580f133cfc947f35509d6b9dca4caea?d=identicon&version=1",
+      "content_type": "text/x-markdown"
+    },
+    {
+      "id": 524298229,
+      "sender_id": 631691,
+      "content": "Discussion: #**general>LeanHammer**",
+      "recipient_id": 127388,
+      "timestamp": 1750093458,
+      "client": "ZulipElectron",
+      "subject": "LeanHammer",
+      "topic_links": [],
+      "is_me_message": false,
+      "reactions": [],
+      "submessages": [],
+      "flags": [
+        "read"
+      ],
+      "sender_full_name": "Thomas Zhu",
+      "sender_email": "user631691@leanprover.zulipchat.com",
+      "sender_realm_str": "leanprover",
+      "display_recipient": "announce",
+      "type": "stream",
+      "stream_id": 113486,
+      "avatar_url": "https://secure.gravatar.com/avatar/5580f133cfc947f35509d6b9dca4caea?d=identicon&version=1",
+      "content_type": "text/x-markdown"
+    }
+  ],
+  "found_anchor": true,
+  "found_oldest": true,
+  "found_newest": true,
+  "history_limited": false,
+  "anchor": 524298229
+}
