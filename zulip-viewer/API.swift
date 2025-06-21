@@ -117,6 +117,21 @@ import Observation
         return response.subscriptions
     }
     
+    func getAllStreams() async throws -> [Stream] {
+        let session = URLSession(configuration: sessionConfig)
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        
+        let url = URL(string: "https://leanprover.zulipchat.com/api/v1/streams")!
+        let (data, _) = try await session.data(from: url)
+
+        let response = try decoder.decode(SubscriptionsResponse.self, from: data)
+        
+        return response.streams
+    }
+    
     func getTopics(streamId: Int) async throws -> [Topic] {
         let session = URLSession(configuration: sessionConfig)
 

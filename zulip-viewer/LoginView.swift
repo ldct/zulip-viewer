@@ -5,6 +5,7 @@ struct LoginView: View {
     @Environment(NetworkClient.self) private var networkClient
     @Binding var isAuthenticated: Bool
     @Binding var subscribedChannels: [Stream]
+    @Binding var allChannels: [Stream]
 
     @State private var username = ""
     @State private var password = ""
@@ -56,6 +57,7 @@ struct LoginView: View {
             do {
                 try await networkClient.login(username: username, password: password)
                 subscribedChannels = try await networkClient.getSubscriptions()
+                allChannels = try await networkClient.getAllStreams()
                 isAuthenticated = true
             } catch {
                 errorMessage = error.localizedDescription
@@ -67,6 +69,7 @@ struct LoginView: View {
 
 #Preview {
     LoginView(isAuthenticated: .constant(false),
-              subscribedChannels: .constant([]))
+              subscribedChannels: .constant([]),
+              allChannels: .constant([]))
         .environment(NetworkClient())
 }

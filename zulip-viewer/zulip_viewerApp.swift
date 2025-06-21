@@ -11,6 +11,7 @@ import SwiftUI
 struct zulip_viewerApp: App {
     
     @State private var subscribedChannels: [Stream] = []
+    @State private var allChannels: [Stream] = []
     @State private var isAuthenticated = false
     @State private var networkClient = NetworkClient()
 
@@ -18,10 +19,11 @@ struct zulip_viewerApp: App {
         WindowGroup {
             Group {
                 if isAuthenticated {
-                    StreamsView(subscribedChannels: subscribedChannels)
+                    StreamsView(subscribedChannels: subscribedChannels, allChannels: allChannels)
                 } else {
                     LoginView(isAuthenticated: $isAuthenticated,
-                              subscribedChannels: $subscribedChannels)
+                              subscribedChannels: $subscribedChannels,
+                              allChannels: $allChannels)
                 }
             }
             .environment(networkClient)
@@ -29,6 +31,7 @@ struct zulip_viewerApp: App {
                 do {
                     try await networkClient.authenticate()
                     subscribedChannels = try await networkClient.getSubscriptions()
+                    allChannels = try await networkClient.getAllStreams()
                     isAuthenticated = true
                 } catch {
                 }
