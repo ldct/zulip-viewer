@@ -11,7 +11,7 @@ extension NetworkClient {
         queryItems.append(URLQueryItem(name: "anchor", value: "\(anchor)"))
         queryItems.append(URLQueryItem(name: "num_before", value: "5"))
         queryItems.append(URLQueryItem(name: "num_after", value: "5"))
-        queryItems.append(URLQueryItem(name: "apply_markdown", value: "true"))
+        queryItems.append(URLQueryItem(name: "apply_markdown", value: "false"))
 
         let narrow = """
 [
