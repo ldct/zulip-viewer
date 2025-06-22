@@ -4,39 +4,44 @@ struct MessageView: View {
     let message: Message
     
     var body: some View {
-        HStack(alignment: .top) {
-            AsyncImage(url: message.avatarUrl) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Circle()
-                    .fill(Color.gray.opacity(0.3))
-            }
-            .frame(width: 40, height: 40)
-            .clipShape(Circle())
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(message.senderFullName)
-                        .bold()
-                    Spacer()
-                    Text(
-                        Date(timeIntervalSince1970: TimeInterval(message.timestamp)),
-                        style: .relative
-                    )
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+        VStack(alignment: .leading, spacing: 12) {
+            // Avatar and name on one line
+            HStack(alignment: .center, spacing: 12) {
+                AsyncImage(url: message.avatarUrl) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Circle()
+                        .fill(Color.gray.opacity(0.3))
                 }
-                .padding(.bottom, 2)
+                .frame(width: 32, height: 32)
+                .clipShape(Circle())
+                
+                Text(message.senderFullName)
+                    .bold()
+                
+                Spacer()
+                
+                Text(
+                    Date(timeIntervalSince1970: TimeInterval(message.timestamp)),
+                    style: .relative
+                )
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+            
+            // Left-aligned message text
+            VStack(alignment: .leading, spacing: 8) {
                 HTMLText(html: message.content)
+                    .multilineTextAlignment(.leading)
                 
                 if !message.reactions.isEmpty {
                     EmojiReactionsView(reactions: message.reactions)
-                        .padding(.top, 4)
                 }
             }
         }
+        .padding(.horizontal)
     }
 }
 
