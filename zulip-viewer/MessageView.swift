@@ -1,4 +1,6 @@
 import SwiftUI
+import MarkdownWebView
+import MarkdownUI
 
 struct MessageView: View {
     let message: Message
@@ -33,7 +35,7 @@ struct MessageView: View {
             
             // Left-aligned message text
             VStack(alignment: .leading, spacing: 8) {
-                HTMLText(html: message.content)
+                Markdown(message.content)
                     .multilineTextAlignment(.leading)
                 
                 if !message.reactions.isEmpty {

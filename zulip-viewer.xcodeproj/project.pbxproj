@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		938B9AED2E07A29000E9265F /* MarkdownWebView in Frameworks */ = {isa = PBXBuildFile; productRef = 938B9AEC2E07A29000E9265F /* MarkdownWebView */; };
+		938B9AF02E07A3CD00E9265F /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 938B9AEF2E07A3CD00E9265F /* MarkdownUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		937DBB862CBAC8C20083536D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				938B9AED2E07A29000E9265F /* MarkdownWebView in Frameworks */,
+				938B9AF02E07A3CD00E9265F /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +119,8 @@
 			);
 			name = "zulip-viewer";
 			packageProductDependencies = (
+				938B9AEC2E07A29000E9265F /* MarkdownWebView */,
+				938B9AEF2E07A3CD00E9265F /* MarkdownUI */,
 			);
 			productName = "zulip-viewer";
 			productReference = 937DBB752CBAC8C10083536D /* zulip-viewer.app */;
@@ -195,6 +204,10 @@
 			);
 			mainGroup = 937DBB6C2CBAC8C10083536D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				938B9AEB2E07A29000E9265F /* XCRemoteSwiftPackageReference "markdown-webview" */,
+				938B9AEE2E07A3CD00E9265F /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 937DBB762CBAC8C10083536D /* Products */;
 			projectDirPath = "";
@@ -560,6 +573,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		938B9AEB2E07A29000E9265F /* XCRemoteSwiftPackageReference "markdown-webview" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/djmango/markdown-webview";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		938B9AEE2E07A3CD00E9265F /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		938B9AEC2E07A29000E9265F /* MarkdownWebView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 938B9AEB2E07A29000E9265F /* XCRemoteSwiftPackageReference "markdown-webview" */;
+			productName = MarkdownWebView;
+		};
+		938B9AEF2E07A3CD00E9265F /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 938B9AEE2E07A3CD00E9265F /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 937DBB6D2CBAC8C10083536D /* Project object */;
 }
