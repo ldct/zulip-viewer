@@ -23,6 +23,7 @@ struct TopicsDetailView: View {
             }
         }
         .task {
+            print(topic.name)
             let narrowResponse = try! await networkClient.getNarrow(
                 anchor: topic.maxId,
                 channelID: streamId,

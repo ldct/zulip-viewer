@@ -9,14 +9,20 @@ extension NetworkClient {
     func getNarrow(anchor: Int, channelID: Int, topicName: String) async throws -> NarrowResponse {
         var queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem(name: "anchor", value: "\(anchor)"))
-        queryItems.append(URLQueryItem(name: "num_before", value: "5"))
-        queryItems.append(URLQueryItem(name: "num_after", value: "5"))
+        queryItems.append(URLQueryItem(name: "num_before", value: "1000"))
+        queryItems.append(URLQueryItem(name: "num_after", value: "0"))
         queryItems.append(URLQueryItem(name: "apply_markdown", value: "false"))
+        queryItems.append(URLQueryItem(name: "client_gravatar", value: "false"))
 
+        // URL-encode the topic name to handle quotes and special characters
+        let encodedTopicName = topicName.replacingOccurrences(of: "\"", with: "\\\"")
+        
+        
+        
         let narrow = """
 [
 {"negated":false,"operator":"channel","operand":\(channelID)},
-{"negated":false,"operator":"topic","operand":"\(topicName)"}
+{"negated":false,"operator":"topic","operand":"\(encodedTopicName)"}
 ]
 """
         queryItems.append(URLQueryItem(name: "narrow", value: narrow))

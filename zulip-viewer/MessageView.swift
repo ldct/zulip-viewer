@@ -29,7 +29,7 @@ struct MessageView: View {
                     Date(timeIntervalSince1970: TimeInterval(message.timestamp)),
                     style: .relative
                 )
-                    .font(.caption)
+                .font(.body)
                     .foregroundColor(.secondary)
             }
             
@@ -37,13 +37,13 @@ struct MessageView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Markdown(message.content)
                     .multilineTextAlignment(.leading)
+                    .font(.subheadline)
                 
                 if !message.reactions.isEmpty {
                     EmojiReactionsView(reactions: message.reactions)
                 }
             }
         }
-        .padding(.horizontal)
     }
 }
 
@@ -71,9 +71,9 @@ struct EmojiReactionsView: View {
                 let reactionData = reactionCounts[key]!
                 HStack(spacing: 2) {
                     Text(reactionData.emoji)
-                        .font(.system(size: 14))
+                        .font(.system(size: 12))
                     Text("\(reactionData.count)")
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundColor(.secondary)
                 }
                 .padding(.horizontal, 6)

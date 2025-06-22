@@ -6,7 +6,6 @@ struct StreamTopicsView: View {
     
     @State var topics: [Topic] = []
     @State private var isSubscribed: Bool = false
-    @State private var isLoading: Bool = false
     @State private var showingError: Bool = false
     @State private var errorMessage: String = ""
     
@@ -32,28 +31,24 @@ struct StreamTopicsView: View {
                         await toggleSubscription()
                     }
                 }) {
-                    HStack {
-                        Image(systemName: isSubscribed ? "bell.fill" : "bell")
-                        Text(isSubscribed ? "Unsubscribe" : "Subscribe")
-                    }
-                    .foregroundColor(isSubscribed ? .red : .blue)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(isSubscribed ? .red : .blue, lineWidth: 1)
-                    )
+                    Image(systemName: isSubscribed ? "radiowaves.right" : "plus")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(isSubscribed ? .blue : .gray)
+                        .frame(width: 32, height: 32)
+                        .background(
+                            Circle()
+                                .fill((isSubscribed ? Color.blue : Color.gray).opacity(0.1))
+                        )
+                        .overlay(
+                            Circle()
+                                .stroke(isSubscribed ? .blue : .gray)
+                        )
                 }
-                .disabled(isLoading)
-                .opacity(isLoading ? 0.6 : 1.0)
+                .contentTransition(
+                    .symbolEffect(.replace)
+                )
             }
             .padding()
-            
-            if isLoading {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .padding()
-            }
             
             List {
                 ForEach(topics) { topic in
@@ -88,26 +83,26 @@ struct StreamTopicsView: View {
     }
     
     private func toggleSubscription() async {
-        isLoading = true
-        
         do {
             if isSubscribed {
                 let response = try await networkClient.unsubscribe(from: stream.name)
                 if response.result == "success" {
-                    isSubscribed = false
+                    withAnimation {
+                        isSubscribed = false
+                    }
                 }
             } else {
                 let response = try await networkClient.subscribe(to: stream.name)
                 if response.result == "success" {
-                    isSubscribed = true
+                    withAnimation {
+                        isSubscribed = true
+                    }
                 }
             }
         } catch {
             errorMessage = "Failed to \(isSubscribed ? "unsubscribe from" : "subscribe to") channel: \(error.localizedDescription)"
             showingError = true
         }
-        
-        isLoading = false
     }
 }
 
