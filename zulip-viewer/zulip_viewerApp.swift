@@ -32,6 +32,22 @@ struct zulip_viewerApp: App {
                     try await networkClient.authenticate()
                     subscribedChannels = try await networkClient.getSubscriptions()
                     allChannels = try await networkClient.getAllStreams()
+                    
+                    // Mark streams as subscribed
+                    let subscribedIds = Set(subscribedChannels.map { $0.streamId })
+                    allChannels = allChannels.map { stream in
+                        var updatedStream = stream
+                        updatedStream.isSubscribed = subscribedIds.contains(stream.streamId)
+                        return updatedStream
+                    }
+                    
+                    // Update subscribed channels to also have isSubscribed = true
+                    subscribedChannels = subscribedChannels.map { stream in
+                        var updatedStream = stream
+                        updatedStream.isSubscribed = true
+                        return updatedStream
+                    }
+                    
                     isAuthenticated = true
                 } catch {
                 }
