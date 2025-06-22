@@ -17,6 +17,7 @@ struct TopicsDetailContentView: View {
                     MessageView(message: message)
                 }
             }
+            .listStyle(PlainListStyle())
         }
     }
 }
@@ -46,4 +47,37 @@ struct TopicsDetailView: View {
             messages = narrowResponse.messages
         }
     }
+}
+
+#Preview {
+    TopicsDetailContentView(
+        streamName: "general",
+        topicName: "Daily Standup",
+        messages: [
+            Message(
+                _id: 1,
+                content: "Good morning everyone! Ready for today's standup?",
+                senderFullName: "Alice Johnson",
+                timestamp: 1640995200,
+                avatarUrl: nil,
+                reactions: []
+            ),
+            Message(
+                _id: 2,
+                content: "Yesterday I worked on the user authentication system. Today I'll be focusing on the API integration.",
+                senderFullName: "Bob Smith",
+                timestamp: 1640995300,
+                avatarUrl: nil,
+                reactions: []
+            ),
+            Message(
+                _id: 3,
+                content: "I finished the UI mockups and got approval from the design team. Moving on to implementation now.",
+                senderFullName: "Carol Davis",
+                timestamp: 1640995400,
+                avatarUrl: nil,
+                reactions: []
+            )
+        ]
+    )
 }
