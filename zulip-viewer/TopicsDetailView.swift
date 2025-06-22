@@ -1,7 +1,27 @@
 import SwiftUI
 import WebKit
 
-/// Detail view of a topic
+/// Pure UI view for displaying topic details without network calls
+struct TopicsDetailContentView: View {
+    let streamName: String
+    let topicName: String
+    let messages: [Message]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("\(streamName) > \(topicName)")
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            List {
+                ForEach(messages) { message in
+                    MessageView(message: message)
+                }
+            }
+        }
+    }
+}
+
+/// Wrapper view that handles network calls and data loading
 struct TopicsDetailView: View {
     let streamId: Int
     let streamName: String
@@ -12,18 +32,12 @@ struct TopicsDetailView: View {
     @State var messages = [Message]()
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("\(streamName) > \(topic.name)")
-                .frame(maxWidth: .infinity, alignment: .center)
-
-            List {
-                ForEach(messages) { message in
-                    MessageView(message: message)
-                }
-            }
-        }
+        TopicsDetailContentView(
+            streamName: streamName,
+            topicName: topic.name,
+            messages: messages
+        )
         .task {
-            print(topic.name)
             let narrowResponse = try! await networkClient.getNarrow(
                 anchor: topic.maxId,
                 channelID: streamId,
@@ -33,16 +47,3 @@ struct TopicsDetailView: View {
         }
     }
 }
-
-struct HTMLStringView: UIViewRepresentable {
-    let htmlContent: String
-
-    func makeUIView(context: Context) -> WKWebView {
-        return WKWebView()
-    }
-
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        uiView.loadHTMLString(htmlContent, baseURL: nil)
-    }
-}
-

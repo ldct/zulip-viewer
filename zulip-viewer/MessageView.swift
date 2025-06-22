@@ -47,50 +47,31 @@ struct MessageView: View {
     }
 }
 
-struct EmojiReactionsView: View {
-    let reactions: [EmojiReaction]
-    
-    private var reactionCounts: [String: (emoji: String, count: Int)] {
-        var counts: [String: (emoji: String, count: Int)] = [:]
-        
-        for reaction in reactions {
-            let key = reaction.emojiName
-            if let existing = counts[key] {
-                counts[key] = (emoji: existing.emoji, count: existing.count + 1)
-            } else {
-                counts[key] = (emoji: reaction.unicodeEmoji, count: 1)
-            }
-        }
-        
-        return counts
-    }
-    
-    var body: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 5), spacing: 4) {
-            ForEach(Array(reactionCounts.keys.sorted()), id: \.self) { key in
-                let reactionData = reactionCounts[key]!
-                HStack(spacing: 2) {
-                    Text(reactionData.emoji)
-                        .font(.system(size: 12))
-                    Text("\(reactionData.count)")
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
-                }
-                .padding(.horizontal, 6)
-                .padding(.vertical, 2)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(8)
-            }
-        }
-    }
+#Preview {
+    MessageView(message: Message(
+        _id: 12345,
+        content: "Hello everyone! 👋 This is a sample message with some **markdown** formatting and a [link](https://zulip.com).",
+        senderFullName: "John Doe",
+        timestamp: Int(Date().timeIntervalSince1970),
+        avatarUrl: URL(string: "https://via.placeholder.com/64x64/007bff/ffffff?text=JD"),
+        reactions: [
+            EmojiReaction(
+                emojiName: "thumbs_up",
+                emojiCode: "1f44d",
+                reactionType: "unicode_emoji",
+                userID: 1
+            ),
+            EmojiReaction(
+                emojiName: "heart",
+                emojiCode: "2764",
+                reactionType: "unicode_emoji", 
+                userID: 2
+            )
+        ]
+    ))
+    .border(Color.gray, width: 1)
+    .padding()
 }
 
-@available(iOS 15, *)
-struct HTMLText: View {
-    let html: String
-    
-    var body: some View {
-        let attrS = try! AttributedString(markdown: html)
-        Text(attrS)
-    }
-}
+
+
