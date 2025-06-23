@@ -125,4 +125,37 @@ extension NetworkClient {
         
         return response.messages
     }
+    
+    /// Mark all messages in a topic as read
+    func markTopicAsRead(channelID: Int, topicName: String) async throws {
+        // First get all unread messages in the topic
+        let unreadMessages = try await getUnreadMessages(channelID: channelID, topicName: topicName)
+        
+        guard !unreadMessages.isEmpty else {
+            return // No unread messages to mark
+        }
+        
+        // Create message IDs array
+        let messageIds = unreadMessages.map { $0._id }
+        
+        // Prepare request body
+        var request = URLRequest(url: URL(string: "https://leanprover.zulipchat.com/api/v1/messages/flags")!)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        // Create form data
+        var formData = "op=add&flag=read"
+        let messageIdsString = messageIds.map { String($0) }.joined(separator: ",")
+        formData += "&messages=[\(messageIdsString)]"
+        
+        request.httpBody = formData.data(using: .utf8)
+        
+        let session = URLSession(configuration: sessionConfig)
+        let (_, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+    }
 } 

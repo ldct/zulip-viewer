@@ -7,21 +7,24 @@ struct TopicsDetailContentView: View {
     let topicName: String
     let messages: [Message]
     let unreadCount: Int
+    let onMarkAsRead: () -> Void
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("\(streamName) > \(topicName)")
+                Text("\(topicName)")
                     .frame(maxWidth: .infinity, alignment: .center)
                 
                 if unreadCount > 0 {
-                    Text("\(unreadCount)")
-                        .font(.caption)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.red)
-                        .cornerRadius(12)
+                    Button(action: onMarkAsRead) {
+                        Text("\(unreadCount)")
+                            .font(.caption)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.red)
+                            .cornerRadius(12)
+                    }
                 }
             }
             .padding(.horizontal)
@@ -54,11 +57,18 @@ struct TopicsDetailView: View {
             streamName: streamName,
             topicName: topic.name,
             messages: messages,
-            unreadCount: unreadCount
+            unreadCount: unreadCount,
+            onMarkAsRead: markAsRead
         )
         .task {
+            await loadContent()
+        }
+    }
+    
+    private func loadContent() async {
+        do {
             // Load all messages
-            let narrowResponse = try! await networkClient.getNarrow(
+            let narrowResponse = try await networkClient.getNarrow(
                 anchor: topic.maxId,
                 channelID: streamId,
                 topicName: topic.name
@@ -66,11 +76,31 @@ struct TopicsDetailView: View {
             messages = narrowResponse.messages
             
             // Get unread count
-            unreadCount = try! await networkClient.getUnreadMessagesCount(
+            unreadCount = try await networkClient.getUnreadMessagesCount(
                 channelID: streamId,
                 topicName: topic.name
             )
             print("unreadcount=\(unreadCount)")
+        } catch {
+            print("Error loading content: \(error)")
+        }
+    }
+    
+    private func markAsRead() {
+        Task {
+            do {
+                try await networkClient.markTopicAsRead(
+                    channelID: streamId,
+                    topicName: topic.name
+                )
+                // Refresh the unread count after marking as read
+                unreadCount = try await networkClient.getUnreadMessagesCount(
+                    channelID: streamId,
+                    topicName: topic.name
+                )
+            } catch {
+                print("Error marking as read: \(error)")
+            }
         }
     }
 }
@@ -108,6 +138,7 @@ struct TopicsDetailView: View {
                 flags: ["read"]
             )
         ],
-        unreadCount: 1
+        unreadCount: 1,
+        onMarkAsRead: {}
     )
 }
