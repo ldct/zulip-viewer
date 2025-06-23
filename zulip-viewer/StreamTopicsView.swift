@@ -16,9 +16,6 @@ struct StreamTopicsView: View {
             // Stream header with subscription toggle
             HStack {
                 VStack(alignment: .leading) {
-                    Text(stream.name)
-                        .font(.title2)
-                        .fontWeight(.bold)
                     Text(stream.description)
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -57,6 +54,7 @@ struct StreamTopicsView: View {
                     })
                 }
             }
+            .navigationTitle(stream.name)
         }
         .task {
             await loadData()
