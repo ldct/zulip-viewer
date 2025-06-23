@@ -39,14 +39,90 @@ extension NetworkClient {
         
         let url = URL(string: "https://leanprover.zulipchat.com/api/v1/messages\(queryParameters)")!
         
-        print(url)
+//        print(url)
         
         let (data, _) = try await session.data(from: url)
         
-        print(String(data: data, encoding: .utf8)!)
+//        print(String(data: data, encoding: .utf8)!)
 
         let response = try decoder.decode(NarrowResponse.self, from: data)
 
         return response
+    }
+    
+    /// Get unread messages count for a specific channel and topic
+    func getUnreadMessagesCount(channelID: Int, topicName: String) async throws -> Int {
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "anchor", value: "newest"))
+        queryItems.append(URLQueryItem(name: "num_before", value: "5000")) // Max allowed
+        queryItems.append(URLQueryItem(name: "num_after", value: "0"))
+        queryItems.append(URLQueryItem(name: "apply_markdown", value: "false"))
+        queryItems.append(URLQueryItem(name: "client_gravatar", value: "false"))
+
+        // URL-encode the topic name to handle quotes and special characters
+        let encodedTopicName = topicName.replacingOccurrences(of: "\"", with: "\\\"")
+        
+        // Narrow to unread messages in specific channel and topic
+        let narrow = """
+[
+{"negated":false,"operator":"channel","operand":\(channelID)},
+{"negated":false,"operator":"topic","operand":"\(encodedTopicName)"},
+{"negated":false,"operator":"is","operand":"unread"}
+]
+"""
+        queryItems.append(URLQueryItem(name: "narrow", value: narrow))
+
+        var components = URLComponents()
+        components.queryItems = queryItems
+        let queryParameters = components.string!
+        
+        let session = URLSession(configuration: sessionConfig)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let url = URL(string: "https://leanprover.zulipchat.com/api/v1/messages\(queryParameters)")!
+        
+        let (data, _) = try await session.data(from: url)
+        let response = try decoder.decode(NarrowResponse.self, from: data)
+        
+        return response.messages.count
+    }
+    
+    /// Get unread messages for a specific channel and topic
+    func getUnreadMessages(channelID: Int, topicName: String) async throws -> [Message] {
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "anchor", value: "newest"))
+        queryItems.append(URLQueryItem(name: "num_before", value: "5000")) // Max allowed
+        queryItems.append(URLQueryItem(name: "num_after", value: "0"))
+        queryItems.append(URLQueryItem(name: "apply_markdown", value: "false"))
+        queryItems.append(URLQueryItem(name: "client_gravatar", value: "false"))
+
+        // URL-encode the topic name to handle quotes and special characters
+        let encodedTopicName = topicName.replacingOccurrences(of: "\"", with: "\\\"")
+        
+        // Narrow to unread messages in specific channel and topic
+        let narrow = """
+[
+{"negated":false,"operator":"channel","operand":\(channelID)},
+{"negated":false,"operator":"topic","operand":"\(encodedTopicName)"},
+{"negated":false,"operator":"is","operand":"unread"}
+]
+"""
+        queryItems.append(URLQueryItem(name: "narrow", value: narrow))
+
+        var components = URLComponents()
+        components.queryItems = queryItems
+        let queryParameters = components.string!
+        
+        let session = URLSession(configuration: sessionConfig)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let url = URL(string: "https://leanprover.zulipchat.com/api/v1/messages\(queryParameters)")!
+        
+        let (data, _) = try await session.data(from: url)
+        let response = try decoder.decode(NarrowResponse.self, from: data)
+        
+        return response.messages
     }
 } 

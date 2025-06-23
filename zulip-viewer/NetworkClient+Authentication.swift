@@ -11,7 +11,7 @@ extension NetworkClient {
         } else {
             try await self.apiKey = getAPIKeyWithSavedCredentials()
                     
-            print("apiKey=\(apiKey)")
+//            print("apiKey=\(apiKey)")
 
             _ = try? KeychainManager.removeFromKeychain(tag: KeychainManager.tag)
             try! KeychainManager.storeAPIKey(self.apiKey)

@@ -6,15 +6,31 @@ struct TopicsDetailContentView: View {
     let streamName: String
     let topicName: String
     let messages: [Message]
+    let unreadCount: Int
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("\(streamName) > \(topicName)")
-                .frame(maxWidth: .infinity, alignment: .center)
+            HStack {
+                Text("\(streamName) > \(topicName)")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                
+                if unreadCount > 0 {
+                    Text("\(unreadCount)")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.red)
+                        .cornerRadius(12)
+                }
+            }
+            .padding(.horizontal)
 
             List {
                 ForEach(messages) { message in
                     MessageView(message: message)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets())
                 }
             }
             .listStyle(PlainListStyle())
@@ -31,20 +47,30 @@ struct TopicsDetailView: View {
     @Environment(NetworkClient.self) private var networkClient
     
     @State var messages = [Message]()
+    @State var unreadCount = 0
     
     var body: some View {
         TopicsDetailContentView(
             streamName: streamName,
             topicName: topic.name,
-            messages: messages
+            messages: messages,
+            unreadCount: unreadCount
         )
         .task {
+            // Load all messages
             let narrowResponse = try! await networkClient.getNarrow(
                 anchor: topic.maxId,
                 channelID: streamId,
                 topicName: topic.name
             )
             messages = narrowResponse.messages
+            
+            // Get unread count
+            unreadCount = try! await networkClient.getUnreadMessagesCount(
+                channelID: streamId,
+                topicName: topic.name
+            )
+            print("unreadcount=\(unreadCount)")
         }
     }
 }
@@ -60,7 +86,8 @@ struct TopicsDetailView: View {
                 senderFullName: "Alice Johnson",
                 timestamp: 1640995200,
                 avatarUrl: nil,
-                reactions: []
+                reactions: [],
+                flags: ["read"]
             ),
             Message(
                 _id: 2,
@@ -68,7 +95,8 @@ struct TopicsDetailView: View {
                 senderFullName: "Bob Smith",
                 timestamp: 1640995300,
                 avatarUrl: nil,
-                reactions: []
+                reactions: [],
+                flags: nil // Unread message
             ),
             Message(
                 _id: 3,
@@ -76,8 +104,10 @@ struct TopicsDetailView: View {
                 senderFullName: "Carol Davis",
                 timestamp: 1640995400,
                 avatarUrl: nil,
-                reactions: []
+                reactions: [],
+                flags: ["read"]
             )
-        ]
+        ],
+        unreadCount: 1
     )
 }

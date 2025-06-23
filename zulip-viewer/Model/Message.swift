@@ -7,6 +7,7 @@ struct Message: Codable, Identifiable {
     let timestamp: Int
     let avatarUrl: URL?
     let reactions: [EmojiReaction]
+    let flags: [String]?
     
     enum CodingKeys: String, CodingKey {
         case _id = "id"
@@ -15,9 +16,18 @@ struct Message: Codable, Identifiable {
         case timestamp
         case avatarUrl
         case reactions
+        case flags
     }
     
     var id: String {
         "\(_id)"
+    }
+    
+    var isRead: Bool {
+        flags?.contains("read") ?? false
+    }
+    
+    var isUnread: Bool {
+        !isRead
     }
 }
