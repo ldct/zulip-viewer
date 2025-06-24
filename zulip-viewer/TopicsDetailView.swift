@@ -1,12 +1,17 @@
 import SwiftUI
 import WebKit
 
+extension Notification.Name {
+    static let scrollToFirstUnread = Notification.Name("scrollToFirstUnread")
+}
+
 /// Pure UI view for displaying topic details without network calls
 struct TopicsDetailContentView: View {
     let streamName: String
     let topicName: String
     let messages: [Message]
     let unreadCount: Int
+    let onScrollToFirstUnread: () -> Void
     let onMarkTopicAsRead: () -> Void
     let onMarkMessageAsRead: (Int) -> Void
     
@@ -17,7 +22,7 @@ struct TopicsDetailContentView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 
                 if unreadCount > 0 {
-                    Button(action: onMarkTopicAsRead) {
+                    Button(action: onScrollToFirstUnread) {
                         Text("\(unreadCount)")
                             .font(.caption)
                             .foregroundColor(.white)
@@ -30,14 +35,44 @@ struct TopicsDetailContentView: View {
             }
             .padding(.horizontal)
 
-            List {
-                ForEach(messages) { message in
-                    MessageView(message: message, onMarkAsRead: onMarkMessageAsRead)
+            ScrollViewReader { proxy in
+                List {
+                    ForEach(messages) { message in
+                        MessageView(message: message, onMarkAsRead: onMarkMessageAsRead)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets())
+                            .id(message.id)
+                    }
+                    
+                    // Add mark all as read button at the end
+                    if unreadCount > 0 {
+                        HStack {
+                            Spacer()
+                            Button(action: onMarkTopicAsRead) {
+                                Text("Mark all as read")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 12)
+                                    .background(Color.blue)
+                                    .cornerRadius(8)
+                            }
+                            Spacer()
+                        }
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
+                        .padding(.vertical, 20)
+                    }
+                }
+                .listStyle(PlainListStyle())
+                .onReceive(NotificationCenter.default.publisher(for: .scrollToFirstUnread)) { _ in
+                    if let firstUnreadMessage = messages.first(where: { $0.isUnread }) {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            proxy.scrollTo(firstUnreadMessage.id, anchor: .top)
+                        }
+                    }
                 }
             }
-            .listStyle(PlainListStyle())
         }
     }
 }
@@ -59,6 +94,7 @@ struct TopicsDetailView: View {
             topicName: topic.name,
             messages: messages,
             unreadCount: unreadCount,
+            onScrollToFirstUnread: scrollToFirstUnread,
             onMarkTopicAsRead: markTopicAsRead,
             onMarkMessageAsRead: markMessageAsRead
         )
@@ -86,6 +122,10 @@ struct TopicsDetailView: View {
         } catch {
             print("Error loading content: \(error)")
         }
+    }
+    
+    private func scrollToFirstUnread() {
+        NotificationCenter.default.post(name: .scrollToFirstUnread, object: nil)
     }
     
     private func markTopicAsRead() {
@@ -156,6 +196,7 @@ struct TopicsDetailView: View {
             )
         ],
         unreadCount: 1,
+        onScrollToFirstUnread: {},
         onMarkTopicAsRead: {},
         onMarkMessageAsRead: { _ in }
     )
