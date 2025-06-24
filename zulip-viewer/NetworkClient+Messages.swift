@@ -158,4 +158,23 @@ extension NetworkClient {
             throw URLError(.badServerResponse)
         }
     }
+    
+    /// Mark a single message as read
+    func markMessageAsRead(messageId: Int) async throws {
+        var request = URLRequest(url: URL(string: "https://leanprover.zulipchat.com/api/v1/messages/flags")!)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        // Create form data for single message
+        let formData = "op=add&flag=read&messages=[\(messageId)]"
+        request.httpBody = formData.data(using: .utf8)
+        
+        let session = URLSession(configuration: sessionConfig)
+        let (_, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse,
+              httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+    }
 } 

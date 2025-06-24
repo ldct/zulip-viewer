@@ -8,6 +8,7 @@ struct TopicsDetailContentView: View {
     let messages: [Message]
     let unreadCount: Int
     let onMarkAsRead: () -> Void
+    let onMarkMessageAsRead: (Int) -> Void
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,7 +32,7 @@ struct TopicsDetailContentView: View {
 
             List {
                 ForEach(messages) { message in
-                    MessageView(message: message)
+                    MessageView(message: message, onMarkAsRead: onMarkMessageAsRead)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
                 }
@@ -58,7 +59,8 @@ struct TopicsDetailView: View {
             topicName: topic.name,
             messages: messages,
             unreadCount: unreadCount,
-            onMarkAsRead: markAsRead
+            onMarkAsRead: markAsRead,
+            onMarkMessageAsRead: markMessageAsRead
         )
         .task {
             await loadContent()
@@ -103,6 +105,21 @@ struct TopicsDetailView: View {
             }
         }
     }
+    
+    private func markMessageAsRead(messageId: Int) {
+        Task {
+            do {
+                try await networkClient.markMessageAsRead(messageId: messageId)
+                // Refresh the unread count after marking individual message as read
+                unreadCount = try await networkClient.getUnreadMessagesCount(
+                    channelID: streamId,
+                    topicName: topic.name
+                )
+            } catch {
+                print("Error marking message as read: \(error)")
+            }
+        }
+    }
 }
 
 #Preview {
@@ -139,6 +156,7 @@ struct TopicsDetailView: View {
             )
         ],
         unreadCount: 1,
-        onMarkAsRead: {}
+        onMarkAsRead: {},
+        onMarkMessageAsRead: { _ in }
     )
 }
