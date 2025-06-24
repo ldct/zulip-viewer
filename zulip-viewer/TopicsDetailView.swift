@@ -7,7 +7,7 @@ struct TopicsDetailContentView: View {
     let topicName: String
     let messages: [Message]
     let unreadCount: Int
-    let onMarkAsRead: () -> Void
+    let onMarkTopicAsRead: () -> Void
     let onMarkMessageAsRead: (Int) -> Void
     
     var body: some View {
@@ -17,7 +17,7 @@ struct TopicsDetailContentView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                 
                 if unreadCount > 0 {
-                    Button(action: onMarkAsRead) {
+                    Button(action: onMarkTopicAsRead) {
                         Text("\(unreadCount)")
                             .font(.caption)
                             .foregroundColor(.white)
@@ -59,7 +59,7 @@ struct TopicsDetailView: View {
             topicName: topic.name,
             messages: messages,
             unreadCount: unreadCount,
-            onMarkAsRead: markAsRead,
+            onMarkTopicAsRead: markTopicAsRead,
             onMarkMessageAsRead: markMessageAsRead
         )
         .task {
@@ -88,7 +88,7 @@ struct TopicsDetailView: View {
         }
     }
     
-    private func markAsRead() {
+    private func markTopicAsRead() {
         Task {
             do {
                 try await networkClient.markTopicAsRead(
@@ -156,7 +156,7 @@ struct TopicsDetailView: View {
             )
         ],
         unreadCount: 1,
-        onMarkAsRead: {},
+        onMarkTopicAsRead: {},
         onMarkMessageAsRead: { _ in }
     )
 }
