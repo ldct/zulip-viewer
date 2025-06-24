@@ -22,7 +22,7 @@ struct MessageView: View {
                 
                 Text(message.senderFullName)
                     .bold()
-                    .foregroundColor(message.isUnread ? .primary : .primary)
+                    .foregroundColor(.primary)
                 
                 // Unread indicator badge
                 if message.isUnread {
@@ -44,7 +44,7 @@ struct MessageView: View {
                 )
                 .font(.body)
                 .foregroundColor(message.isUnread ? .primary : .secondary)
-                .fontWeight(message.isUnread ? .medium : .regular)
+                .fontWeight(.regular)
             }
             
             // Left-aligned message text
@@ -52,7 +52,7 @@ struct MessageView: View {
                 Markdown(message.content)
                     .multilineTextAlignment(.leading)
                     .font(.subheadline)
-                    .fontWeight(message.isUnread ? .medium : .regular)
+                    .fontWeight(.regular)
                 
                 if !message.reactions.isEmpty {
                     EmojiReactionsView(reactions: message.reactions)
